@@ -5,7 +5,10 @@ using UnityEngine;
 public class HeroRabit : MonoBehaviour {
 
 	public float speed = 1;
+	public float maxSpeed = 10;
 	Rigidbody2D myBody = null;
+
+	Animator anim;
 
 	// Use this for initialization
 	void Start () {
@@ -14,17 +17,22 @@ public class HeroRabit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		anim = GetComponent<Animator>();
 	}
 
 	void FixedUpdate() {
 		//[-1, 1]
 		float value = Input.GetAxis ("Horizontal");
+
+		anim.SetFloat ("speed", Mathf.Abs (value));
+
 		if (Mathf.Abs (value) > 0) {
 			Vector2 vel = myBody.velocity;
 			vel.x = value * speed;
 			myBody.velocity = vel;
 		}
+
+
 
 		SpriteRenderer sr = GetComponent<SpriteRenderer>();
 		if(value < 0) {
