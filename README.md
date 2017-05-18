@@ -1,5 +1,4 @@
 # UnityProject
-Empty project
 
 Hungry rabit
 
