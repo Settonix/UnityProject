@@ -10,9 +10,11 @@ public class HeroRabit : MonoBehaviour {
 
 	Animator anim;
 
+	//bool grounded = false;
 	// Use this for initialization
 	void Start () {
 		myBody = this.GetComponent<Rigidbody2D> ();
+		LevelController.current.setStartPosition (transform.position);
 	}
 	
 	// Update is called once per frame
