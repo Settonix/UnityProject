@@ -61,6 +61,7 @@ public class HeroRabit : MonoBehaviour {
 			this.JumpActive = true;
 		}
 		if(this.JumpActive) {
+			//meh
 			//Якщо кнопку ще тримають
 			if(Input.GetButton("Jump")) {
 				this.JumpTime += Time.deltaTime;
