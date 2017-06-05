@@ -26,6 +26,13 @@ public class HeroRabit : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		anim = GetComponent<Animator>();
+	
+		if(this.isGrounded) {
+			anim.SetBool ("jump", false);
+		} else {
+			anim.SetBool ("jump", true);
+		}
+
 	}
 
 	void FixedUpdate() {
@@ -76,12 +83,6 @@ public class HeroRabit : MonoBehaviour {
 			}
 		}
 
-		Animator animator = GetComponent<Animator> ();
-		if(this.isGrounded) {
-			animator.SetBool ("jump", false);
-		} else {
-			animator.SetBool ("jump", true);
-		}
 
 
 		SpriteRenderer sr = GetComponent<SpriteRenderer>();
