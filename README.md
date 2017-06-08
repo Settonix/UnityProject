@@ -2,7 +2,5 @@
 
  Hungry rabit:
 
- Homework 1 ,
- 
- Homework2
+ Homework 1, Homework2
 
