@@ -48,9 +48,6 @@ public class MovingPlatform : MonoBehaviour {
 	[SerializeField]
 	private float speed;
 
-	[SerializeField]
-	private float timeToWait = Time.deltaTime;
-
 
 
 	[SerializeField]
@@ -58,6 +55,11 @@ public class MovingPlatform : MonoBehaviour {
 
 	[SerializeField]
 	private Transform transformB;
+
+	[SerializeField]
+	private float time_to_wait;
+
+	private float waitCounter;
 
 
 	// Use this for initialization
@@ -79,19 +81,31 @@ public class MovingPlatform : MonoBehaviour {
 
 	private void Move() { 
 		childTransform.localPosition = Vector3.MoveTowards (childTransform.localPosition, nextPos, speed * Time.deltaTime);
+		isArrived ();
 
-
-		if (Vector3.Distance (childTransform.localPosition, nextPos) <= 0.1) {
-			ChangeDestination();
-		}
 	}
 
 	private void ChangeDestination() {
-		childTransform.localPosition = Vector3.MoveTowards (childTransform.localPosition, childTransform.localPosition, timeToWait);
+		
 		nextPos = nextPos != posA ? posA : posB;
 	}
 
+	private void isArrived() {
+		if (Vector3.Distance (childTransform.localPosition, nextPos) <= 0.1) {
+			tToWait();
+		}
+	}
 
+	private void tToWait() {
+		float arrivalT = Time.realtimeSinceStartup;
+
+		if (waitCounter <= time_to_wait) {
+			waitCounter +=0.1f;	
+		} else {
+			waitCounter = 0;
+			ChangeDestination();
+		}
+	}
 
 
 }

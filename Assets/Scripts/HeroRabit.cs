@@ -53,64 +53,67 @@ public class HeroRabit : MonoBehaviour {
 
 
 		//class HeroRabit, void FixedUpdate()
-		Vector3 from = transform.position + Vector3.up * 0.3f;
-		Vector3 to = transform.position + Vector3.down * 0.1f;
+		Vector3 from = this.transform.position + Vector3.up * 0.3f;
+		Vector3 to = this.transform.position + Vector3.down * 0.1f;
 		int layer_id = 1 << LayerMask.NameToLayer ("Ground");
 		//Перевіряємо чи проходить лінія через Collider з шаром Ground
 		RaycastHit2D hit = Physics2D.Linecast(from, to, layer_id);
 
+		if (hit)
+		{
 
-		if(hit) {
-			isGrounded = true;
-			if(hit.transform != null
-				&& hit.transform.GetComponent<MovingPlatform>() != null){
+			if(hit.transform != null && hit.transform.GetComponent<Object>() != null){
 				//Приліпаємо до платформи
 				SetNewParent(this.transform, hit.transform);
-			}
-		} else {
-			isGrounded = false;
-			SetNewParent(this.transform, this.heroParent);
 
-		}
-		//Намалювати лінію (для розробника)
-		Debug.DrawLine (from, to, Color.red);
-
-
-		//Якщо кнопка тільки що натислась
-		if(Input.GetButtonDown("Jump") && isGrounded) {
-			this.JumpActive = true;
-		}
-		if(this.JumpActive) {
-			//meh
-			//Якщо кнопку ще тримають
-			if(Input.GetButton("Jump")) {
-				this.JumpTime += Time.deltaTime;
-				if (this.JumpTime < this.MaxJumpTime) {
-					Vector2 vel = myBody.velocity;
-					vel.y = JumpSpeed * (1.0f - JumpTime / MaxJumpTime);
-					myBody.velocity = vel;
-				}
 			} else {
-				this.JumpActive = false;
-				this.JumpTime = 0;
+				//Ми в повітрі відліпаємо під платформи
+				SetNewParent(this.transform, this.heroParent);
 			}
+			isGrounded = true;
+		}
+		else
+		{
+			isGrounded = false;
+		}
+			//Намалювати лінію (для розробника)
+			Debug.DrawLine (from, to, Color.red);
+
+
+			//Якщо кнопка тільки що натислась
+			if (Input.GetButtonDown ("Jump") && isGrounded) {
+				this.JumpActive = true;
+			}
+			if (this.JumpActive) {
+				//meh
+				//Якщо кнопку ще тримають
+				if (Input.GetButton ("Jump")) {
+					this.JumpTime += Time.deltaTime;
+					if (this.JumpTime < this.MaxJumpTime) {
+						Vector2 vel = myBody.velocity;
+						vel.y = JumpSpeed * (1.0f - JumpTime / MaxJumpTime);
+						myBody.velocity = vel;
+					}
+				} else {
+					this.JumpActive = false;
+					this.JumpTime = 0;
+				}
+			}
+
+
+
+			SpriteRenderer sr = GetComponent<SpriteRenderer> ();
+			if (value < 0) {
+				sr.flipX = true;
+			} else if (value > 0) {
+				sr.flipX = false;
+			}
+
+
+	
 		}
 
 
-
-		SpriteRenderer sr = GetComponent<SpriteRenderer>();
-		if(value < 0) {
-			sr.flipX = true;
-		} else if(value > 0) {
-			sr.flipX = false;
-		}
-
-
-		//Згадуємо ground check
-		//RaycastHit2D hit = Physics2D.Linecast(from, to, layer_id);
-
-
-	}
 
 	static void SetNewParent(Transform obj, Transform new_parent) {
 		if(obj.transform.parent != new_parent) {
@@ -124,4 +127,9 @@ public class HeroRabit : MonoBehaviour {
 			obj.transform.position = pos;
 		}
 	}
+
+
+
+
+
 }
