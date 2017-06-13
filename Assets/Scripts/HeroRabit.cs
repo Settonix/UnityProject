@@ -18,6 +18,9 @@ public class HeroRabit : MonoBehaviour {
 
 	Transform heroParent = null;
 
+	private bool mushroomMode = false;
+	private bool death = false;
+
 	//bool grounded = false;
 	// Use this for initialization
 	void Start () {
@@ -127,6 +130,28 @@ public class HeroRabit : MonoBehaviour {
 			obj.transform.position = pos;
 		}
 	}
+
+
+
+	//when mushroom
+	public void changeSize(){
+		if (!mushroomMode) {
+			mushroomMode = true;
+			transform.localScale = new Vector3 (2f, 2f, 0);
+		}
+	}
+
+	public void bang() {
+		if (mushroomMode) {
+			mushroomMode = false;
+			transform.localScale = new Vector3 (1.5f, 1.5f, 0);
+			GetComponent<SpriteRenderer> ().color = Color.red;
+		} else {
+			//death = true;
+			LevelController.current.setStartPosition(transform.position);
+		}
+	}
+
 
 
 
