@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HeroRabit : MonoBehaviour {
+	public static HeroRabit lastRabit;
 
 	public float speed = 1;
 	public float maxSpeed = 10;
 	Rigidbody2D myBody = null;
 
 	bool isGrounded = false;
+	public bool isGhost = false;
 	bool JumpActive = false;
 	float JumpTime = 0f;
 	public float MaxJumpTime = 2f;
 	public float JumpSpeed = 2f;
 
+	float deathAnimTimer = 1f;
+
+	float timer;
+
 	Animator anim;
 
 	Transform heroParent = null;
 
-	private bool mushroomMode = false;
-	private bool death = false;
+	public bool mushroomMode = false;
+	public bool death = false;
 
 	//bool grounded = false;
 	// Use this for initialization
@@ -28,16 +34,54 @@ public class HeroRabit : MonoBehaviour {
 		myBody = this.GetComponent<Rigidbody2D> ();
 		LevelController.current.setStartPosition (transform.position);
 		this.heroParent = this.transform.parent;
+
+		Vector3 rabit_pos = HeroRabit.lastRabit.transform.position;
 	}
 	
 	// Update is called once per frame
+
+	void Awake() {
+		lastRabit = this;
+	}
+
 	void Update () {
+		
+
+
+
+		if (isGhost) {
+			timer += Time.deltaTime;
+		} else {
+			timer = 0;
+		}
+		if (timer - 4.0f > 0f) {
+			isGhost = false;
+			GetComponent<SpriteRenderer> ().color = Color.white;
+		}
+
+		if (death) {
+			deathAnimTimer += Time.deltaTime;
+		} else {
+			deathAnimTimer = 0;
+		}
+
+		if (deathAnimTimer - 1.0f > 0f) {
+			death = false;
+			LevelController.current.onRabitDeath(this);
+		}
+
 		anim = GetComponent<Animator>();
-	
+
 		if(this.isGrounded) {
 			anim.SetBool ("jump", false);
 		} else {
 			anim.SetBool ("jump", true);
+		}
+
+		if (this.death) {
+			anim.SetBool ("isDead", true);
+		} else {
+			anim.SetBool ("isDead", false);
 		}
 
 	}
@@ -144,13 +188,26 @@ public class HeroRabit : MonoBehaviour {
 	public void bang() {
 		if (mushroomMode) {
 			mushroomMode = false;
+			this.isGhost = true;
 			transform.localScale = new Vector3 (1.5f, 1.5f, 0);
 			GetComponent<SpriteRenderer> ().color = Color.red;
 		} else {
-			//death = true;
-			LevelController.current.setStartPosition(transform.position);
+			onDeath();
+
 		}
 	}
+
+	public void onDeath() {
+		death = true;
+
+	}
+
+	public bool IsGhost()
+	{
+		return this.isGhost;
+	}
+
+
 
 
 

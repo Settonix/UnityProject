@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Collectable : MonoBehaviour {
+	//private bool mushroomMode = false;
 	protected virtual void OnRabitHit(HeroRabit rabit) {
 	}
 	void OnTriggerEnter2D(Collider2D collider) {
@@ -18,4 +19,6 @@ public class Collectable : MonoBehaviour {
 	public void CollectedHide() {
 		Destroy(this.gameObject);
 	}
-}
+
+
+	}
